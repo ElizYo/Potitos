@@ -576,29 +576,34 @@
 
 
     //FUNCION/PROCEDIMIENTO--------------------------------------
-    function componente_mas_vendido($id_proveedor) {
+        function componente_mas_vendido($id_proveedor) {
         $conexion = connectBBDD();
-        
+    
+        // Llamando a la función de Oracle y obteniendo el resultado
         $sql = "BEGIN :resultado := componente_mas_vendido(:id_proveedor); END;";
         $stmt = oci_parse($conexion, $sql);
         if (!$stmt) {
             $e = oci_error($conexion);
             trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
-        
-        //guardo el proveedor en una variable para html
-        $id_proveedor = $id_proveedor;
         oci_bind_by_name($stmt, ':id_proveedor', $id_proveedor);
         oci_bind_by_name($stmt, ':resultado', $resultado, 4000);
         oci_execute($stmt);
-
-
-        //CERRAR SESION
+    
+        // Comprobando si la llamada a la funcion sirve
+        $error = oci_error($stmt);
+        if ($error) {
+            // Mostrando un mensaje de error
+            $msg = "Error al llamar a la función: " . $error['message'];
+            trigger_error(htmlentities($msg, ENT_QUOTES), E_USER_ERROR);
+        }
+    
+        // Cerrando sesion
         oci_free_statement($stmt);
         oci_close($conexion);
-
+    
+        // Retornando el resultado de la función
         return $resultado;
     }
-    
     //FIN FUNCION/PROCEDIMIENTO--------------------------------------
 ?>
