@@ -275,7 +275,7 @@
         //Si la sentencia se ejecuto correctamente que proceda a insertar en proveedor_componente para relacionarlo con el proveedor iniciado
         if ($result1) {
 
-            $sql2="INSERT INTO proveedor_componente(id_proveedor, id_componente) VALUES (:id_proveedor, :id_componente)";
+            $sql2="INSERT INTO proveedor_componente(id_proveedor, id_componente, fecha) VALUES (:id_proveedor, :id_componente, CURRENT_DATE)";
 
             $stmt2 = oci_parse($conexion, $sql2);
 
